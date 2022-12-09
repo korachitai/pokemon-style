@@ -8,3 +8,11 @@
     
     context.fillStyle = 'white'
     context.fillRect(0, 0, canvas.width, canvas.height)
+
+    const image = new Image()
+    image.src = './img/Pellet Town.png'
+
+    
+    image.onload = () => {
+        context.drawImage(image, -250, -575)
+    }

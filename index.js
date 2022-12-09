@@ -6,9 +6,58 @@
     canvas.width = 1024
     canvas.height = 576
     
+    //Store rows of collision in the array
+    const collisionsMap = []
+    //Create a sub array for collisions. Creating rows on map.
+    for (let i = 0; i < collisions.length; i += 70) {
+        //Sub arrays of 70 tiles each. Size of the map. To be stored in the const above
+        collisionsMap.push(collisions.slice(i, 70 + i))        
+    }
 
-    context.fillStyle = 'white'
-    context.fillRect(0, 0, canvas.width, canvas.height)
+    //Create the object collision to be rendered
+    class Boundary {
+        //Creates a static propertie to reference the Bondary class below
+        static width = 48 
+        static height = 48
+        constructor({ position }) {
+            this.position = position
+            //Size of the boundary block 12px times 400%
+            this.width = 48
+            this.height = 48
+        }
+
+        //Draws the boundary
+        draw() {
+            context.fillStyle = 'red'
+            context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        }
+    }
+
+    //Stores the several boundaries through the map
+    const boundaries = []
+    //Offset the boundaries of the map. Without this the boundaries appear
+    //without the offset that was set in the background.
+    const offset = {
+        x: -112,
+        y: -640
+    }
+
+    //Loop over each row at a time. i is for index for each row
+    collisionsMap.forEach((row, i) => {
+        //Within each row looks for a symbol. J is the index for each column
+        row.forEach((symbol, j) => {
+            //Only draw the boundary for each 1025 value inside the subarray
+            if (symbol === 1025)
+            boundaries.push(
+                new Boundary({
+                position: {
+                x: j * Boundary.width + offset.x,
+                y: i * Boundary.height + offset.y
+                }
+            })
+            )
+        })
+    })
 
     //Creates a constant for the images and stores it inside the variable
     const image = new Image()
@@ -34,8 +83,8 @@
     const background = new Sprite({
         //Location for the image to be rendered x-y axis
         position: {
-            x:-112,
-            y:-640
+            x: offset.x,
+            y: offset.y
         },
         //What is the image equal to (gets from the constructor)
         image: image
@@ -62,11 +111,23 @@
 
     }
 
+    const testBOundary = new Boundary({
+        position: {
+            x: 400,
+            y: 400
+        }
+    })
     //Animates the player
     function animate(){
         window.requestAnimationFrame(animate)
         //Call the draw method from background
         background.draw()
+        //Draws the boundary on top of backgound and below the player
+        //Calls the draw function above
+        //boundaries.forEach((boundary) => {
+        //    boundary.draw()
+        //})
+        testBOundary.draw()
         context.drawImage(
             playerImage,
             //Crop image

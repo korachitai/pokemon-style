@@ -10,9 +10,17 @@
     context.fillRect(0, 0, canvas.width, canvas.height)
 
     const image = new Image()
+    const playerImage = new Image()
     image.src = './img/Pellet Town.png'
-
+    playerImage.src = './img/playerDown.png'
     
     image.onload = () => {
-        context.drawImage(image, -250, -575)
+        context.drawImage(image, -127 , -640 )
+        context.drawImage(
+            playerImage,
+            canvas.width / 2 - playerImage.width / 2,
+            canvas.height / 2 - playerImage.height / 2
+            )
     }
+
+    
